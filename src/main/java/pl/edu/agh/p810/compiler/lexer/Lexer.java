@@ -1,12 +1,11 @@
 package pl.edu.agh.p810.compiler.lexer;
 
+import pl.edu.agh.p810.compiler.Exceptions.LexicalError;
 import pl.edu.agh.p810.compiler.model.Token;
 import pl.edu.agh.p810.compiler.model.TokenType;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Lexer {
@@ -106,27 +105,26 @@ public class Lexer {
         if(symbol.equals("\n")){
             lineNr++;
         }
-        TokenType tokenType = dictionary.get(symbol) != null ? dictionary.get(symbol) : getTokenType(symbol);
+        TokenType tokenType = null;
+        try {
+            tokenType = dictionary.get(symbol) != null ? dictionary.get(symbol) : getTokenType(symbol);
+        } catch (LexicalError lexicalError) {
+            lexicalError.printStackTrace();
+        }
         Token token = new Token(tokenType, symbol,lineNr);
         return token;
     }
 
-    private TokenType getTokenType(String symbol){
-        Pattern stringPattern = Pattern.compile("\".*\"");
-        Matcher stringMatcher = stringPattern.matcher(symbol);
-        if(stringMatcher.matches()) {
+    private TokenType getTokenType(String symbol) throws LexicalError {
+        if(symbol.charAt(0) == '\"') {
             return TokenType.STRING_LITERAL;
+        } else if(symbol.indexOf(".") == symbol.lastIndexOf(".")){
+           return TokenType.FLOAT_LITERAL;
+        } else if(symbol.charAt(0) >= '0' && symbol.charAt(0) <= '9'){
+            return TokenType.INT_LITERAL;
+        } else if(!symbol.contains(".")){
+            return TokenType.IDENTIFIER;
         }
-        Pattern intPattern = Pattern.compile("\\d+");
-        Matcher intMatcher = intPattern.matcher(symbol);
-        if(intMatcher.matches()) {
-           return TokenType.INT_LITERAL;
-        }
-        Pattern floatPattern = Pattern.compile("\\d+\\.\\d+");
-        Matcher floatMatcher = floatPattern.matcher(symbol);
-        if(floatMatcher.matches()){
-            return TokenType.FLOAT_LITERAL;
-        }
-        return TokenType.IDENTIFIER;
+        throw new LexicalError("Error in line " + lineNr);
     }
 }
