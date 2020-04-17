@@ -1,6 +1,7 @@
 package pl.edu.agh.p810.compiler.lexer;
 
 import org.junit.jupiter.api.Test;
+import pl.edu.agh.p810.compiler.model.Token;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -16,6 +17,14 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(new BufferedReader(new InputStreamReader(
                 this.getClass().getResourceAsStream("randomCode.c"))));
         List<String> result = tokenizer.getTokens().collect(Collectors.toList());
+        int a = 0;
+    }
+
+    @Test public void lexerReturnedStreamOfTokens(){
+        Tokenizer tokenizer = new Tokenizer(new BufferedReader(new InputStreamReader(
+                this.getClass().getResourceAsStream("randomCode.c"))));
+        Lexer lexer = new Lexer();
+        List<Token> result = lexer.getTokensStream(tokenizer.getTokens()).collect(Collectors.toList());
         int a = 0;
     }
 }
