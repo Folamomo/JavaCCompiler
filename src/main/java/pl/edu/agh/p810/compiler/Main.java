@@ -1,6 +1,5 @@
 package pl.edu.agh.p810.compiler;
 
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {

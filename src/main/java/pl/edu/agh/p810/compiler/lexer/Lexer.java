@@ -6,6 +6,8 @@ import pl.edu.agh.p810.compiler.model.TokenType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Lexer {
@@ -118,13 +120,48 @@ public class Lexer {
     private TokenType getTokenType(String symbol) throws LexicalError {
         if(symbol.charAt(0) == '\"') {
             return TokenType.STRING_LITERAL;
-        } else if(symbol.indexOf(".") == symbol.lastIndexOf(".")){
-           return TokenType.FLOAT_LITERAL;
-        } else if(symbol.charAt(0) >= '0' && symbol.charAt(0) <= '9'){
+        } else if(isInt(symbol)){
             return TokenType.INT_LITERAL;
+        } else if(isNumeric(symbol)){
+            return TokenType.FLOAT_LITERAL;
         } else if(!symbol.contains(".")){
             return TokenType.IDENTIFIER;
         }
         throw new LexicalError("Error in line " + lineNr);
+    }
+
+    private Boolean isNumeric(String strNum){
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    private Boolean isInt(String strNum){
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    private Boolean isIdentifier(String symbol){
+        Pattern identifierPattern = Pattern.compile("[a-zA-Z_]\\w*");
+        Matcher identifierMatcher = identifierPattern.matcher(symbol);
+        if(identifierMatcher.matches()){
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
