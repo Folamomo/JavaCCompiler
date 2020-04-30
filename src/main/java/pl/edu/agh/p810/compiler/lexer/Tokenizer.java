@@ -46,7 +46,13 @@ public class Tokenizer {
                 }
 
             } else if (inNumber){
-                if(!isDigit(raw[i])){
+                if(isDigit(raw[i]) || isLetter(raw[i]) || raw[i] == '.'){
+                    if (raw[i] == 'e' || raw[i] == 'p') {
+                        if (i + 1 < raw.length && (raw[i+1] == '+' || raw[i+1] == '-')){
+                            i++;
+                        }
+                    }
+                } else {
                     tokens.add(new String(raw, tokenStartedAt, i - tokenStartedAt));
                     inNumber = false;
                     i--; //analyse again, this time not as a number
