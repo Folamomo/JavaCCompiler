@@ -27,4 +27,14 @@ class TokenizerTest {
         List<Token> result = lexer.getTokensStream(tokenizer.getTokens()).collect(Collectors.toList());
         int a = 0;
     }
+
+    @Test public void parserReturnedAST(){
+        Tokenizer tokenizer = new Tokenizer(new BufferedReader(new InputStreamReader(
+                this.getClass().getResourceAsStream("simpleCode.c"))));
+        Lexer lexer = new Lexer();
+        List<Token> result = lexer.getTokensStream(tokenizer.getTokens()).collect(Collectors.toList());
+        Parser parser = new Parser();
+        AST ast = parser.declaration(result).get();
+        int a = 0;
+    }
 }
