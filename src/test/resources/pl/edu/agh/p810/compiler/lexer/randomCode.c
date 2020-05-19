@@ -2,9 +2,14 @@
 very long
 comment*/
 const char* string_literal = "// /* string contents\t\r"
-int testFunction(int* input, int length) {
+Struct S{
+    int x;
+    double y;
+};
 
+int testFunction(int* input, int length) {
   int sum=0;
+  S s{1, 2};
   for (int i = 0; i<length; ++i) { //comment
     sum += input[i];
   }

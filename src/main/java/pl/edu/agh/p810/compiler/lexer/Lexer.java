@@ -113,8 +113,7 @@ public class Lexer {
         } catch (LexicalError lexicalError) {
             lexicalError.printStackTrace();
         }
-        Token token = new Token(tokenType, symbol,lineNr);
-        return token;
+        return new Token(tokenType, symbol, lineNr);
     }
 
     private TokenType getTokenType(String symbol) throws LexicalError {
@@ -157,11 +156,6 @@ public class Lexer {
     private Boolean isIdentifier(String symbol){
         Pattern identifierPattern = Pattern.compile("[a-zA-Z_]\\w*");
         Matcher identifierMatcher = identifierPattern.matcher(symbol);
-        if(identifierMatcher.matches()){
-            return true;
-        } else {
-            return false;
-        }
-
+        return identifierMatcher.matches();
     }
 }
