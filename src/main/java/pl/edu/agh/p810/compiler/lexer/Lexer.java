@@ -92,6 +92,7 @@ public class Lexer {
         dictionary.put("void", TokenType.VOID);
         dictionary.put("volatile", TokenType.VOLATILE);
         dictionary.put("while", TokenType.WHILE);
+        dictionary.put("\0", TokenType.EOF);
     }
     int lineNr;
 
@@ -130,27 +131,21 @@ public class Lexer {
     }
 
     private Boolean isNumeric(String strNum){
-        if (strNum == null) {
-            return false;
-        }
         try {
-            double d = Double.parseDouble(strNum);
+            Double.parseDouble(strNum);
+            return true;
         } catch (NumberFormatException nfe) {
             return false;
         }
-        return true;
     }
 
     private Boolean isInt(String strNum){
-        if (strNum == null) {
-            return false;
-        }
         try {
-            double d = Integer.parseInt(strNum);
+            Integer.parseInt(strNum);
+            return true;
         } catch (NumberFormatException nfe) {
             return false;
         }
-        return true;
     }
 
     private Boolean isIdentifier(String symbol){

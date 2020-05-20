@@ -82,5 +82,6 @@ public enum TokenType {
     STRING_LITERAL,
     INT_LITERAL,
     FLOAT_LITERAL,
-    IDENTIFIER
+    IDENTIFIER,
+    EOF
 }
