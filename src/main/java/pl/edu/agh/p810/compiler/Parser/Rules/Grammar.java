@@ -28,10 +28,18 @@ public class Grammar {
         addProduction("Declaration", "INT", "Assignment", "SEMICOLON");
 
         addProduction("ExternalDeclaration", "Declaration");
-//        addProduction("ExternalDeclaration", "FunctionDefinition");
+        addProduction("ExternalDeclaration", "FunctionDefinition");
+
+        addProduction("Declarator", "DirectDeclarator");
+
+        addProduction("DirectDeclarator", "IDENTIFIER");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "VOID", "RIGHT_PARENTHESIS"); //TODO VOID zamienić na Declarator i dopisać inne opcje
+
 
         addProduction("TranslationUnit", "ExternalDeclaration", "EOF");
         addProduction("TranslationUnit", "ExternalDeclaration", "TranslationUnit");
+
+        addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
 
         start = symbols.get("TranslationUnit");
     }
