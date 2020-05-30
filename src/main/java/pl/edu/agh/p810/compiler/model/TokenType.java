@@ -47,7 +47,6 @@ public enum TokenType {
     COMMA,
     HASHTAG,
     DOUBLE_HASHTAG,
-
     AUTO,
     BREAK,
     CASE,
@@ -80,10 +79,9 @@ public enum TokenType {
     VOID,
     VOLATILE,
     WHILE,
-
     STRING_LITERAL,
     INT_LITERAL,
     FLOAT_LITERAL,
-    IDENTIFIER
-
+    IDENTIFIER,
+    EOF
 }
