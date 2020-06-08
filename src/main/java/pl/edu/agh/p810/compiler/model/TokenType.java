@@ -11,6 +11,7 @@ public enum TokenType {
     LOWER,
     LOWER_OR_EQUAL,
     GREATER_OR_EQUAL,
+    ARROW,
     DOT,
     PLUS_PLUS,
     MINUS_MINUS,
@@ -83,5 +84,5 @@ public enum TokenType {
     INT_LITERAL,
     FLOAT_LITERAL,
     IDENTIFIER,
-    EOF
+    TILDA, EOF
 }
