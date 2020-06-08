@@ -3,6 +3,7 @@ package pl.edu.agh.p810.compiler.lexer;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.p810.compiler.Parser.AST;
 import pl.edu.agh.p810.compiler.Parser.Parser;
+import pl.edu.agh.p810.compiler.Generator.X86Generator;
 import pl.edu.agh.p810.compiler.model.Token;
 
 import java.io.BufferedReader;
@@ -34,5 +35,16 @@ class TokenizerTest {
         Parser parser = new Parser();
         AST ast = parser.parse(result);
         int a = 0;
+    }
+
+    @Test public void visitor(){
+        Tokenizer tokenizer = new Tokenizer(new BufferedReader(new InputStreamReader(
+                this.getClass().getResourceAsStream("simpleCode.c"))));
+        Lexer lexer = new Lexer();
+        List<Token> result = lexer.getTokensStream(tokenizer.getTokens()).collect(Collectors.toList());
+        Parser parser = new Parser();
+        AST ast = parser.parse(result);
+        X86Generator x86Generator = new X86Generator();
+        x86Generator.visit(ast);
     }
 }

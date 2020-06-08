@@ -43,15 +43,21 @@ public class Grammar {
         addProduction("Declaration", "DeclarationSpecifiers", "IDENTIFIER", "SEMICOLON");
         addProduction("Declaration", "DeclarationSpecifiers", "Assignment", "SEMICOLON");
 
-        addProduction("DirectDeclarator", "IDENTIFIER");
-        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "VOID", "RIGHT_PARENTHESIS"); //TODO VOID zamienić na Declarator i dopisać inne opcje
+        addProduction("DeclarationList", "Declaration");
+        addProduction("DeclarationList", "Declaration", "DeclarationList");
+
+        addProduction("ParameterTypeList", "VOID");
+
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS"); //TODO VOID zamienić na Declarator i dopisać inne opcje
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
 
         addProduction("Declarator", "DirectDeclarator");
 
         addProduction("ExternalDeclaration", "Declaration");
+        addProduction("ExternalDeclaration", "Declaration", "ExternalDeclaration");
 
         addProduction("CompoundStatement", "LEFT_BRACE", "RIGHT_BRACE");
-        addProduction("CompoundStatement", "LEFT_BRACE", "ExternalDeclaration",  "RIGHT_BRACE");
+        addProduction("CompoundStatement", "LEFT_BRACE", "DeclarationList",  "RIGHT_BRACE");
 
         addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "CompoundStatement");
         addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
@@ -68,7 +74,7 @@ public class Grammar {
         symbols.compute(left, (key, old) -> tryAdding(key, old, right));
     }
 
-    private Symbol tryAdding(String key, Symbol old, String... right){
+    private Symbol tryAdding(String key, Symbol old, String... right) throws UndefinedSymbol {
         if (old == null){
             old = new Nonterminal(key, new ArrayList<>());
         }
@@ -77,9 +83,16 @@ public class Grammar {
         }
 
         Nonterminal nonterminal = (Nonterminal) old;
-
-        if (right.length != 0) nonterminal.productions.add(
-                Arrays.stream(right).map(name -> symbols.get(name)).collect(Collectors.toList()));
+        if (right.length != 0){
+            nonterminal.productions.add(
+                    Arrays.stream(right)
+                            .map(s -> nameToSymbol(s).orElseThrow(() -> new UndefinedSymbol(key, right, s)))
+                            .collect(Collectors.toList()));
+        }
         return nonterminal;
+    }
+
+    private Optional<Symbol> nameToSymbol(String name){
+        return Optional.ofNullable(symbols.get(name));
     }
 }

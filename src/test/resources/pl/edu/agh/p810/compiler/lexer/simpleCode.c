@@ -1,4 +1,5 @@
-int main(void)
+int main( )
 {
-    int a = 10 + 43 * 2;
+    int c = 12 + 3;
+    int a = 123;
 }
