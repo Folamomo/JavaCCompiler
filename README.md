@@ -3,16 +3,16 @@ C compiler in Java
 
 _Jakub Ficoń, Igor Noga, Bartosz Ociepka_
 
-##Wstęp
+## Wstęp
 
-##Specyfikacja jezyka
+## Specyfikacja jezyka
 Specyfikacja została zaczerpnięta ze standardu ISO/IEC 9899:201x, nasza aplikacja obsługuje wybrane elementy z tamtej specyfikacji.
-####Elementy leksykalne
+#### Elementy leksykalne
 Tokenizer w naszej aplikacji rozpoznaje nastepujace elementy jezyka:
-#####1. Identyfikatory
-#####2. Stałe (constants)
+##### 1. Identyfikatory
+##### 2. Stałe (constants)
 Wyróżniamy: stałe liczbowe, całkowite i znakowe.
-#####2. Słowa kluczowe:
+##### 3. Słowa kluczowe:
 ```
 auto
 break
@@ -48,7 +48,7 @@ volatile
 while
 \0
 ```
-#####3. Separatory:
+##### 4. Separatory:
 ```
 [ ]
 { }
@@ -96,16 +96,16 @@ while
 #
 ##
 ```
-#####4. Koniec pliku (EOF) `\0`
+##### 5. Koniec pliku (EOF) `\0`
 
-##Sposób działania
+## Sposób działania
 #### Tokenizer
-####Parser
-####Generator
+#### Parser
+#### Generator
 
-##Development process
+## Development process
 
-##Further development
+## Further development
 
-##Źródła
+## Źródła
 http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf
