@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 class TokenizerTest {
     @Test public void someRandomCodeIsTokenizedCorrectly() {
         Tokenizer tokenizer = new Tokenizer(new BufferedReader(new InputStreamReader(
-                this.getClass().getResourceAsStream("randomCode.c"))));
+                this.getClass().getResourceAsStream("simpleCode.c"))));
         List<String> result = tokenizer.getTokens().collect(Collectors.toList());
         int a = 0;
     }
 
     @Test public void lexerReturnedStreamOfTokens(){
         Tokenizer tokenizer = new Tokenizer(new BufferedReader(new InputStreamReader(
-                this.getClass().getResourceAsStream("randomCode.c"))));
+                this.getClass().getResourceAsStream("simpleCode.c"))));
         Lexer lexer = new Lexer();
         List<Token> result = lexer.getTokensStream(tokenizer.getTokens()).collect(Collectors.toList());
         int a = 0;

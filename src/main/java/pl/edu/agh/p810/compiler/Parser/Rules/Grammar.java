@@ -16,8 +16,63 @@ public class Grammar {
     public Grammar(){
         symbols = Stream.of(TokenType.values()).collect(Collectors.toMap(Enum::name, Terminal::new));
 
-        addProduction("CastExpression", "INT_LITERAL");
-        addProduction("CastExpression", "IDENTIFIER");
+        addProduction("ExternalDeclaration");
+        addProduction("Declaration");
+        addProduction("EqualityExpression");
+        addProduction("Initializer");
+        addProduction("InitDeclaratorList");
+        addProduction("CastExpression");
+        addProduction("TypeName");
+        addProduction("AssignmentExpression");
+        addProduction("TypeSpecifier");
+        addProduction("TypeQualifier");
+        addProduction("AbstractDeclarator");
+        addProduction("Expression");
+
+        addProduction("UnaryOperator", "AMPERSAND");
+        addProduction("UnaryOperator", "STAR");
+        addProduction("UnaryOperator", "PLUS");
+        addProduction("UnaryOperator", "MINUS");
+        addProduction("UnaryOperator", "TILDA");
+        addProduction("UnaryOperator", "LOGIC_NOT");
+
+        addProduction("PrimaryExpression", "IDENTIFIER");
+        addProduction("PrimaryExpression", "INT_LITERAL"); //TODO uproszczone
+        addProduction("PrimaryExpression", "LEFT_PARENTHESIS", "Expression", "RIGHT_PARENTHESIS");
+
+        addProduction("ArgumentExpressionList", "AssignmentExpression");
+        addProduction("ArgumentExpressionList", "AssignmentExpression", "COMMA" , "ArgumentExpressionList");
+
+        addProduction("PostfixExpression", "PrimaryExpression"); //TODO uproszczone
+        addProduction("PostfixExpression", "LEFT_BRACKET", "Expression", "RIGHT_BRACKET", "PostfixExpression");
+        addProduction("PostfixExpression", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS", "PostfixExpression");
+        addProduction("PostfixExpression", "LEFT_PARENTHESIS", "ArgumentExpressionList", "RIGHT_PARENTHESIS", "PostfixExpression");
+
+        addProduction("UnaryExpression", "PostfixExpression");
+        addProduction("UnaryExpression", "PLUS_PLUS", "UnaryExpression");
+        addProduction("UnaryExpression", "MINUS_MINUS", "UnaryExpression");
+        addProduction("UnaryExpression", "UnaryOperator" , "CastExpression");
+        addProduction("UnaryExpression", "SIZEOF", "UnaryExpression");
+        addProduction("UnaryExpression", "SIZEOF", "LEFT_PARENTHESIS", "TypeName", "RIGHT_PARENTHESIS");
+
+        addProduction("SpecifierQualifierList", "TypeSpecifier");
+        addProduction("SpecifierQualifierList", "TypeSpecifier", "SpecifierQualifierList");
+        addProduction("SpecifierQualifierList", "TypeQualifier");
+        addProduction("SpecifierQualifierList", "TypeQualifier", "SpecifierQualifierList");
+
+        addProduction("DirectAbstractDeclarator", "LEFT_PARENTHESIS", "AbstractDeclarator", "RIGHT_PARENTHESIS"); //TODO uproszczone
+
+        addProduction("Pointer", "STAR"); //TODO uproszczone
+
+        addProduction("AbstractDeclarator", "Pointer");
+        addProduction("AbstractDeclarator", "DirectAbstractDeclarator");
+        addProduction("AbstractDeclarator", "Pointer", "DirectAbstractDeclarator");
+
+        addProduction("TypeName", "SpecifierQualifierList");
+        addProduction("TypeName", "SpecifierQualifierList", "AbstractDeclarator");
+
+        addProduction("CastExpression", "UnaryExpression");
+        addProduction("CastExpression", "LEFT_PARENTHESIS", "TypeName", "RIGHT_PARENTHESIS", "CastExpression");
 
         addProduction("MultiplicativeExpression", "CastExpression");
         addProduction("MultiplicativeExpression", "CastExpression", "STAR", "MultiplicativeExpression");
@@ -28,20 +83,18 @@ public class Grammar {
         addProduction("AdditiveExpression", "MultiplicativeExpression", "PLUS", "AdditiveExpression");
         addProduction("AdditiveExpression", "MultiplicativeExpression", "MINUS", "AdditiveExpression");
 
-        addProduction("Expression", "AdditiveExpression");
-        addProduction("Expression", "IDENTIFIER");
-        addProduction("Expression", "STRING_LITERAL");
-        addProduction("Expression", "INT_LITERAL");
-        addProduction("Expression", "FLOAT_LITERAL");
+        addProduction("Expression", "AssignmentExpression");
 
         addProduction("Assignment", "IDENTIFIER", "DIRECT_ASSIGNMENT", "Expression");
 
         addProduction("TypeSpecifier", "INT");
 
-        addProduction("DeclarationSpecifiers", "TypeSpecifier");
+        addProduction("TypeQualifier", "CONST");
 
-        addProduction("Declaration", "DeclarationSpecifiers", "IDENTIFIER", "SEMICOLON");
-        addProduction("Declaration", "DeclarationSpecifiers", "Assignment", "SEMICOLON");
+        addProduction("DeclarationSpecifiers", "TypeSpecifier"); //TODO uprosczone
+        addProduction("DeclarationSpecifiers", "TypeSpecifier", "DeclarationSpecifiers");
+        addProduction("DeclarationSpecifiers", "TypeQualifier");
+        addProduction("DeclarationSpecifiers", "TypeQualifier", "DeclarationSpecifiers");
 
         addProduction("DeclarationList", "Declaration");
         addProduction("DeclarationList", "Declaration", "DeclarationList");
@@ -50,11 +103,9 @@ public class Grammar {
 
         addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS"); //TODO VOID zamienić na Declarator i dopisać inne opcje
         addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
+        addProduction("DirectDeclarator", "IDENTIFIER");
 
         addProduction("Declarator", "DirectDeclarator");
-
-        addProduction("ExternalDeclaration", "Declaration");
-        addProduction("ExternalDeclaration", "Declaration", "ExternalDeclaration");
 
         addProduction("CompoundStatement", "LEFT_BRACE", "RIGHT_BRACE");
         addProduction("CompoundStatement", "LEFT_BRACE", "DeclarationList",  "RIGHT_BRACE");
@@ -62,7 +113,57 @@ public class Grammar {
         addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "CompoundStatement");
         addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
 
+        addProduction("ShiftExpression", "AdditiveExpression");
+        addProduction("ShiftExpression", "AdditiveExpression", "BITWISE_LEFT", "ShiftExpression");
+        addProduction("ShiftExpression", "AdditiveExpression", "BITWISE_RIGHT", "ShiftExpression");
+
+        addProduction("RelationalExpression", "ShiftExpression");
+        addProduction("RelationalExpression", "ShiftExpression", "LOWER", "RelationalExpression");
+        addProduction("RelationalExpression", "ShiftExpression", "GREATER", "RelationalExpression");
+        addProduction("RelationalExpression", "ShiftExpression", "LOWER_OR_EQUAL", "RelationalExpression");
+        addProduction("RelationalExpression", "ShiftExpression", "GREATER_OR_EQUAL", "RelationalExpression");
+
+        addProduction("EqualityExpression", "RelationalExpression");
+        addProduction("EqualityExpression", "RelationalExpression", "EQUAL_TO", "EqualityExpression");
+        addProduction("EqualityExpression", "RelationalExpression", "NOT_EQUAL_TO", "EqualityExpression");
+
+        addProduction("AndExpression", "EqualityExpression");
+        addProduction("AndExpression", "EqualityExpression", "AMPERSAND", "AndExpression");
+
+        addProduction("ExclusiveOrExpression", "AndExpression");
+        addProduction("ExclusiveOrExpression", "AndExpression", "BITWISE_XOR", "ExclusiveOrExpression");
+
+        addProduction("InclusiveOrExpression", "ExclusiveOrExpression");
+        addProduction("InclusiveOrExpression", "ExclusiveOrExpression", "BITWISE_OR","InclusiveOrExpression");
+
+        addProduction("LogicalAndExpression", "InclusiveOrExpression");
+        addProduction("LogicalAndExpression", "InclusiveOrExpression", "LOGIC_AND", "LogicalAndExpression");
+
+        addProduction("LogicalOrExpression", "LogicalAndExpression");
+        addProduction("LogicalOrExpression", "LogicalAndExpression", "LOGIC_OR", "LogicalOrExpression");
+
+        addProduction("ConditionalExpression", "LogicalOrExpression");
+        addProduction("ConditionalExpression", "LogicalOrExpression", "TERNARY_CONDITIONAL_LEFT", "Expression", "TERNARY_CONDITIONAL_RIGHT", "ConditionalExpression");
+
+        addProduction("AssignmentExpression", "ConditionalExpression");
+
+        addProduction("InitializerList", "Initializer");
+        addProduction("InitializerList", "Initializer", "COMMA", "InitializerList");
+
+        addProduction("Initializer", "AssignmentExpression");
+        addProduction("Initializer", "LEFT_BRACE", "InitializerList", "RIGHT_BRACE");
+
+        addProduction("InitDeclarator", "Declarator");
+        addProduction("InitDeclarator", "Declarator", "DIRECT_ASSIGNMENT", "Initializer");
+
+        addProduction("InitDeclaratorList", "InitDeclarator");
+        addProduction("InitDeclaratorList", "InitDeclarator", "COMMA", "InitDeclaratorList");
+
+        addProduction("Declaration", "DeclarationSpecifiers", "SEMICOLON");
+        addProduction("Declaration", "DeclarationSpecifiers", "InitDeclaratorList", "SEMICOLON");
+
         addProduction("ExternalDeclaration", "FunctionDefinition");
+        addProduction("ExternalDeclaration", "Declaration");
 
         addProduction("TranslationUnit", "ExternalDeclaration", "EOF");
         addProduction("TranslationUnit", "ExternalDeclaration", "TranslationUnit");
