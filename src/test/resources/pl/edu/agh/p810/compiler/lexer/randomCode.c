@@ -1,6 +1,7 @@
 /*mulitline
 very long
 comment*/
+int b = -(10+~0x17);
 const char* string_literal = "// /* string contents\t\r"
 Struct S{
     int x;

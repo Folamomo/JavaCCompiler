@@ -1,2 +1,5 @@
-int a = 10 + 43;
-int b = 3;
+int main( )
+{
+    int c = 12 + 3;
+    int a = 123;
+}

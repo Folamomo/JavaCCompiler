@@ -24,6 +24,7 @@ public class Lexer {
         dictionary.put("<=", TokenType.LOWER_OR_EQUAL);
         dictionary.put(">=", TokenType.GREATER_OR_EQUAL);
         dictionary.put(".", TokenType.DOT);
+        dictionary.put("->", TokenType.ARROW);
         dictionary.put("++", TokenType.PLUS_PLUS);
         dictionary.put("--", TokenType.MINUS_MINUS);
         dictionary.put("&", TokenType.AMPERSAND);
@@ -44,6 +45,7 @@ public class Lexer {
         dictionary.put("?", TokenType.TERNARY_CONDITIONAL_LEFT);
         dictionary.put(":", TokenType.TERNARY_CONDITIONAL_RIGHT);
         dictionary.put(";", TokenType.SEMICOLON);
+        dictionary.put("~", TokenType.TILDA);
         dictionary.put("...", TokenType.ELLIPSIS);
         dictionary.put("=", TokenType.DIRECT_ASSIGNMENT);
         dictionary.put("*=", TokenType.PRODUCT_ASSIGNMENT);

@@ -16,19 +16,53 @@ public class Grammar {
     public Grammar(){
         symbols = Stream.of(TokenType.values()).collect(Collectors.toMap(Enum::name, Terminal::new));
 
+        addProduction("CastExpression", "INT_LITERAL");
+        addProduction("CastExpression", "IDENTIFIER");
+
+        addProduction("MultiplicativeExpression", "CastExpression");
+        addProduction("MultiplicativeExpression", "CastExpression", "STAR", "MultiplicativeExpression");
+        addProduction("MultiplicativeExpression", "CastExpression", "DIVIDE", "MultiplicativeExpression");
+        addProduction("MultiplicativeExpression", "CastExpression", "MODULO", "MultiplicativeExpression");
+
+        addProduction("AdditiveExpression", "MultiplicativeExpression");
+        addProduction("AdditiveExpression", "MultiplicativeExpression", "PLUS", "AdditiveExpression");
+        addProduction("AdditiveExpression", "MultiplicativeExpression", "MINUS", "AdditiveExpression");
+
+        addProduction("Expression", "AdditiveExpression");
         addProduction("Expression", "IDENTIFIER");
         addProduction("Expression", "STRING_LITERAL");
         addProduction("Expression", "INT_LITERAL");
         addProduction("Expression", "FLOAT_LITERAL");
-        addProduction("Expression", "INT_LITERAL", "PLUS", "INT_LITERAL");
 
         addProduction("Assignment", "IDENTIFIER", "DIRECT_ASSIGNMENT", "Expression");
 
-        addProduction("Declaration", "INT", "IDENTIFIER", "SEMICOLON");
-        addProduction("Declaration", "INT", "Assignment", "SEMICOLON");
+        addProduction("TypeSpecifier", "INT");
+
+        addProduction("DeclarationSpecifiers", "TypeSpecifier");
+
+        addProduction("Declaration", "DeclarationSpecifiers", "IDENTIFIER", "SEMICOLON");
+        addProduction("Declaration", "DeclarationSpecifiers", "Assignment", "SEMICOLON");
+
+        addProduction("DeclarationList", "Declaration");
+        addProduction("DeclarationList", "Declaration", "DeclarationList");
+
+        addProduction("ParameterTypeList", "VOID");
+
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS"); //TODO VOID zamienić na Declarator i dopisać inne opcje
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
+
+        addProduction("Declarator", "DirectDeclarator");
 
         addProduction("ExternalDeclaration", "Declaration");
-//        addProduction("ExternalDeclaration", "FunctionDefinition");
+        addProduction("ExternalDeclaration", "Declaration", "ExternalDeclaration");
+
+        addProduction("CompoundStatement", "LEFT_BRACE", "RIGHT_BRACE");
+        addProduction("CompoundStatement", "LEFT_BRACE", "DeclarationList",  "RIGHT_BRACE");
+
+        addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "CompoundStatement");
+        addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
+
+        addProduction("ExternalDeclaration", "FunctionDefinition");
 
         addProduction("TranslationUnit", "ExternalDeclaration", "EOF");
         addProduction("TranslationUnit", "ExternalDeclaration", "TranslationUnit");
@@ -40,7 +74,7 @@ public class Grammar {
         symbols.compute(left, (key, old) -> tryAdding(key, old, right));
     }
 
-    private Symbol tryAdding(String key, Symbol old, String... right){
+    private Symbol tryAdding(String key, Symbol old, String... right) throws UndefinedSymbol {
         if (old == null){
             old = new Nonterminal(key, new ArrayList<>());
         }
@@ -49,9 +83,16 @@ public class Grammar {
         }
 
         Nonterminal nonterminal = (Nonterminal) old;
-
-        nonterminal.productions.add(
-                Arrays.stream(right).map(name -> symbols.get(name)).collect(Collectors.toList()));
+        if (right.length != 0){
+            nonterminal.productions.add(
+                    Arrays.stream(right)
+                            .map(s -> nameToSymbol(s).orElseThrow(() -> new UndefinedSymbol(key, right, s)))
+                            .collect(Collectors.toList()));
+        }
         return nonterminal;
+    }
+
+    private Optional<Symbol> nameToSymbol(String name){
+        return Optional.ofNullable(symbols.get(name));
     }
 }

@@ -24,6 +24,6 @@ public class Terminal extends Symbol {
     }
 
     private AST makeAST(Token token){
-        return new AST(this, token.getValue(), null);
+        return new AST(this, token.getValue(), List.of());
     }
 }

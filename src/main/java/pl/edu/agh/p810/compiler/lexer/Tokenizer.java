@@ -66,7 +66,7 @@ public class Tokenizer {
                 }
 
             } else if (inSymbol){
-                if (isSymbol(raw[i])){
+                if (isMultiCharSymbol(raw[i])){
                     if (raw[i] == '"')  {
                         tokens.add(new String(raw, tokenStartedAt, i - tokenStartedAt));
                         inSymbol = false;
@@ -104,6 +104,8 @@ public class Tokenizer {
                             if(raw[i+1] == '*') {
                                 inComment = true;
                             }
+                        } else if(isOneCharSymbol(raw[i])){
+                            tokens.add(new String(raw, i, 1));
                         }
                         else inSymbol = true;
                     }
@@ -130,35 +132,43 @@ public class Tokenizer {
         return c >= '0' && c <= '9';
     }
 
+    //chars that exist only in length-one symbols
+    private boolean isOneCharSymbol(char c){
+        return c == '"' ||
+                c == '\'' ||
+                c == '.' ||
+                c == '?' ||
+                c == '[' ||
+                c == ']' ||
+                c == '{' ||
+                c == '}' ||
+                c == '(' ||
+                c == ')' ||
+                c == ':' ||
+                c == '~';
+    }
+
+    private boolean isMultiCharSymbol(char c){
+        return c == '!' ||
+                c == '#' ||
+                c == '%' ||
+                c == '&' ||
+                c == '*' ||
+                c == '+' ||
+                c == ',' ||
+                c == '-' ||
+                c == '/' ||
+                c == ';' ||
+                c == '<' ||
+                c == '=' ||
+                c == '>' ||
+                c == '\\' ||
+                c == '^' ||
+                c == '|';
+    }
+
     private boolean isSymbol(char c){
-       return c == '!' ||
-               c == '"' ||
-               c == '#' ||
-               c == '%' ||
-               c == '&' ||
-               c == '\'' ||
-               c == '(' ||
-               c == ')' ||
-               c == '*' ||
-               c == '+' ||
-               c == ',' ||
-               c == '-' ||
-               c == '.' ||
-               c == '/' ||
-               c == ':' ||
-               c == ';' ||
-               c == '<' ||
-               c == '=' ||
-               c == '>' ||
-               c == '?' ||
-               c == '[' ||
-               c == '\\' ||
-               c == ']' ||
-               c == '^' ||
-               c == '{' ||
-               c == '|' ||
-               c == '}' ||
-               c == '~';
+        return isMultiCharSymbol(c) || isOneCharSymbol(c);
     }
 
     private boolean isWhitespace(char c){
