@@ -28,6 +28,9 @@ public class Grammar {
         addProduction("TypeQualifier");
         addProduction("AbstractDeclarator");
         addProduction("Expression");
+        addProduction("CompoundStatement");
+        addProduction("Statement");
+        addProduction("ConditionalExpression");
 
         addProduction("UnaryOperator", "AMPERSAND");
         addProduction("UnaryOperator", "STAR");
@@ -107,8 +110,42 @@ public class Grammar {
 
         addProduction("Declarator", "DirectDeclarator");
 
+        addProduction("LabeledStatement", "IDENTIFIER", "TERNARY_CONDITIONAL_RIGHT", "Statement");
+        addProduction("LabeledStatement", "CASE", "ConditionalExpression", "TERNARY_CONDITIONAL_RIGHT", "Statement"); //Uproszczone z ConstantExpression na ConditionalExpression
+        addProduction("LabeledStatement", "DEFAULT", "TERNARY_CONDITIONAL_RIGHT", "Statement");
+
+        addProduction("ExpressionStatement", "SEMICOLON");
+        addProduction("ExpressionStatement", "Expression", "SEMICOLON");
+
+        addProduction("SelectionStatement", "IF", "LEFT_PARENTHESIS", "Expression", "RIGHT_PARENTHESIS", "Statement");
+        addProduction("SelectionStatement", "IF", "LEFT_PARENTHESIS", "Expression", "RIGHT_PARENTHESIS", "Statement", "ELSE", "Statement");
+        addProduction("SelectionStatement", "SWITCH", "LEFT_PARENTHESIS", "Expression", "RIGHT_PARENTHESIS", "Statement");
+
+        addProduction("IterationStatement", "WHILE", "LEFT_PARENTHESIS", "Expression", "RIGHT_PARENTHESIS", "Statement");
+        addProduction("IterationStatement", "DO", "Statement", "WHILE", "LEFT_PARENTHESIS", "Expression", "RIGHT_PARENTHESIS", "SEMICOLON");
+        addProduction("IterationStatement", "FOR", "LEFT_PARENTHESIS", "ExpressionStatement", "ExpressionStatement", "Statement");
+        addProduction("IterationStatement", "WHILE", "LEFT_PARENTHESIS", "ExpressionStatement", "ExpressionStatement", "Expression", "RIGHT_PARENTHESIS", "Statement");
+
+        addProduction("JumpStatement", "GOTO", "IDENTIFIER", "SEMICOLON");
+        addProduction("JumpStatement", "CONTINUE", "SEMICOLON");
+        addProduction("JumpStatement", "BREAK", "SEMICOLON");
+        addProduction("JumpStatement", "RETURN", "SEMICOLON");
+        addProduction("JumpStatement", "RETURN", "Expression", "SEMICOLON");
+
+        addProduction("Statement", "LabeledStatement");
+        addProduction("Statement", "CompoundStatement");
+        addProduction("Statement", "ExpressionStatement");
+        addProduction("Statement", "SelectionStatement");
+        addProduction("Statement", "IterationStatement");
+        addProduction("Statement", "JumpStatement");
+
+        addProduction("StatementList", "Statement");
+        addProduction("StatementList", "Statement", "StatementList");
+
         addProduction("CompoundStatement", "LEFT_BRACE", "RIGHT_BRACE");
         addProduction("CompoundStatement", "LEFT_BRACE", "DeclarationList",  "RIGHT_BRACE");
+        addProduction("CompoundStatement", "LEFT_BRACE", "StatementList",  "RIGHT_BRACE");
+        addProduction("CompoundStatement", "LEFT_BRACE", "DeclarationList", "StatementList", "RIGHT_BRACE");
 
         addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "CompoundStatement");
         addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
@@ -145,7 +182,20 @@ public class Grammar {
         addProduction("ConditionalExpression", "LogicalOrExpression");
         addProduction("ConditionalExpression", "LogicalOrExpression", "TERNARY_CONDITIONAL_LEFT", "Expression", "TERNARY_CONDITIONAL_RIGHT", "ConditionalExpression");
 
+        addProduction("AssignmentOperator", "DIRECT_ASSIGNMENT");
+        addProduction("AssignmentOperator", "PRODUCT_ASSIGNMENT");
+        addProduction("AssignmentOperator", "QUOTIENT_ASSIGNMENT");
+        addProduction("AssignmentOperator", "REMAINDER_ASSIGNMENT");
+        addProduction("AssignmentOperator", "SUM_ASSIGNMENT");
+        addProduction("AssignmentOperator", "DIFFERENCE_ASSIGNMENT");
+        addProduction("AssignmentOperator", "BITWISE_LEFT_ASSIGNMENT");
+        addProduction("AssignmentOperator", "BITWISE_RIGHT_ASSIGNMENT");
+        addProduction("AssignmentOperator", "BITWISE_AND_ASSIGNMENT");
+        addProduction("AssignmentOperator", "BITWISE_XOR_ASSIGNMENT");
+        addProduction("AssignmentOperator", "BITWISE_OR_ASSIGNMENT");
+
         addProduction("AssignmentExpression", "ConditionalExpression");
+        addProduction("AssignmentExpression", "UnaryExpression", "AssignmentOperator", "AssignmentExpression");
 
         addProduction("InitializerList", "Initializer");
         addProduction("InitializerList", "Initializer", "COMMA", "InitializerList");
