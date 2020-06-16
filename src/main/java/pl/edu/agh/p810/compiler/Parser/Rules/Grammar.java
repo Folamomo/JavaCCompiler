@@ -31,6 +31,8 @@ public class Grammar {
         addProduction("CompoundStatement");
         addProduction("Statement");
         addProduction("ConditionalExpression");
+        addProduction("Declarator");
+        addProduction("ParameterTypeList");
 
         addProduction("UnaryOperator", "AMPERSAND");
         addProduction("UnaryOperator", "STAR");
@@ -40,16 +42,21 @@ public class Grammar {
         addProduction("UnaryOperator", "LOGIC_NOT");
 
         addProduction("PrimaryExpression", "IDENTIFIER");
+        addProduction("PrimaryExpression", "STRING_LITERAL");
         addProduction("PrimaryExpression", "INT_LITERAL"); //TODO uproszczone
         addProduction("PrimaryExpression", "LEFT_PARENTHESIS", "Expression", "RIGHT_PARENTHESIS");
 
         addProduction("ArgumentExpressionList", "AssignmentExpression");
         addProduction("ArgumentExpressionList", "AssignmentExpression", "COMMA" , "ArgumentExpressionList");
 
-        addProduction("PostfixExpression", "PrimaryExpression"); //TODO uproszczone
+        addProduction("PostfixExpression", "PrimaryExpression");
         addProduction("PostfixExpression", "LEFT_BRACKET", "Expression", "RIGHT_BRACKET", "PostfixExpression");
         addProduction("PostfixExpression", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS", "PostfixExpression");
         addProduction("PostfixExpression", "LEFT_PARENTHESIS", "ArgumentExpressionList", "RIGHT_PARENTHESIS", "PostfixExpression");
+        addProduction("PostfixExpression", "DOT", "IDENTIFIER");
+        addProduction("PostfixExpression", "ARROW", "IDENTIFIER");
+        addProduction("PostfixExpression", "PLUS_PLUS");
+        addProduction("PostfixExpression", "MINUS_MINUS");
 
         addProduction("UnaryExpression", "PostfixExpression");
         addProduction("UnaryExpression", "PLUS_PLUS", "UnaryExpression");
@@ -63,9 +70,23 @@ public class Grammar {
         addProduction("SpecifierQualifierList", "TypeQualifier");
         addProduction("SpecifierQualifierList", "TypeQualifier", "SpecifierQualifierList");
 
-        addProduction("DirectAbstractDeclarator", "LEFT_PARENTHESIS", "AbstractDeclarator", "RIGHT_PARENTHESIS"); //TODO uproszczone
+        addProduction("DirectAbstractDeclarator", "LEFT_PARENTHESIS", "AbstractDeclarator", "RIGHT_PARENTHESIS");
+        addProduction("DirectAbstractDeclarator", "LEFT_BRACKET", "RIGHT_BRACKET");
+        addProduction("DirectAbstractDeclarator", "LEFT_BRACKET", "ConditionalExpression", "RIGHT_BRACKET");
+        addProduction("DirectAbstractDeclarator", "LEFT_BRACKET", "RIGHT_BRACKET", "DirectAbstractDeclarator");
+        addProduction("DirectAbstractDeclarator", "LEFT_BRACKET", "ConditionalExpression", "RIGHT_BRACKET", "DirectAbstractDeclarator");
+        addProduction("DirectAbstractDeclarator", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
+        addProduction("DirectAbstractDeclarator", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS");
+        addProduction("DirectAbstractDeclarator", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS", "DirectAbstractDeclarator");
+        addProduction("DirectAbstractDeclarator", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS", "DirectAbstractDeclarator");
 
-        addProduction("Pointer", "STAR"); //TODO uproszczone
+        addProduction("TypeQualifierList", "TypeQualifier");
+        addProduction("TypeQualifierList", "TypeQualifier", "TypeQualifierList");
+
+        addProduction("Pointer", "STAR");
+        addProduction("Pointer", "STAR", "TypeQualifierList");
+        addProduction("Pointer", "STAR", "Pointer");
+        addProduction("Pointer", "STAR", "TypeQualifierList", "Pointer");
 
         addProduction("AbstractDeclarator", "Pointer");
         addProduction("AbstractDeclarator", "DirectAbstractDeclarator");
@@ -87,28 +108,95 @@ public class Grammar {
         addProduction("AdditiveExpression", "MultiplicativeExpression", "MINUS", "AdditiveExpression");
 
         addProduction("Expression", "AssignmentExpression");
+        addProduction("Expression", "AssignmentExpression", "COMMA", "Expression");
 
         addProduction("Assignment", "IDENTIFIER", "DIRECT_ASSIGNMENT", "Expression");
 
+        addProduction("StructDeclarator", "Declarator");
+        addProduction("StructDeclarator", "TERNARY_CONDITIONAL_RIGHT", "ConditionalExpression");
+        addProduction("StructDeclarator", "Declarator", "TERNARY_CONDITIONAL_RIGHT", "ConditionalExpression");
+
+        addProduction("StructDeclaratorList", "StructDeclarator");
+        addProduction("StructDeclaratorList", "StructDeclarator", "COMMA", "StructDeclaratorList");
+
+        addProduction("StructDeclaration", "SpecifierQualifierList", "StructDeclaratorList", "SEMICOLON");
+
+        addProduction("StructDeclarationList", "StructDeclaration");
+        addProduction("StructDeclarationList", "StructDeclaration", "StructDeclarationList");
+
+        addProduction("StructOrUnion", "STRUCT");
+        addProduction("StructOrUnion", "UNION");
+
+        addProduction("StructOrUnionSpecifier", "StructOrUnion", "IDENTIFIER", "LEFT_BRACE", "StructDeclarationList", "RIGHT_BRACE");
+        addProduction("StructOrUnionSpecifier", "StructOrUnion", "LEFT_BRACE", "StructDeclarationList", "RIGHT_BRACE");
+        addProduction("StructOrUnionSpecifier", "StructOrUnion", "IDENTIFIER");
+
+        addProduction("Enumerator", "IDENTIFIER");
+        addProduction("Enumerator", "IDENTIFIER", "DIRECT_ASSIGNMENT", "ConditionalExpression");
+
+        addProduction("EnumeratorList", "Enumerator");
+        addProduction("EnumeratorList", "Enumerator", "COMMA", "EnumeratorList");
+
+        addProduction("EnumSpecifier", "ENUM", "LEFT_BRACE", "EnumeratorList", "RIGHT_BRACE");
+        addProduction("EnumSpecifier", "ENUM", "IDENTIFIER", "LEFT_BRACE", "EnumeratorList", "RIGHT_BRACE");
+        addProduction("EnumSpecifier", "ENUM", "IDENTIFIER");
+
         addProduction("TypeSpecifier", "INT");
+        addProduction("TypeSpecifier", "VOID");
+        addProduction("TypeSpecifier", "CHAR");
+        addProduction("TypeSpecifier", "SHORT");
+        addProduction("TypeSpecifier", "INT");
+        addProduction("TypeSpecifier", "LONG");
+        addProduction("TypeSpecifier", "FLOAT");
+        addProduction("TypeSpecifier", "DOUBLE");
+        addProduction("TypeSpecifier", "SIGNED");
+        addProduction("TypeSpecifier", "UNSIGNED");
+        addProduction("TypeSpecifier", "StructOrUnionSpecifier");
+        addProduction("TypeSpecifier", "EnumSpecifier");
+        addProduction("TypeSpecifier", "TypeName");
 
         addProduction("TypeQualifier", "CONST");
+        addProduction("TypeQualifier", "VOLATILE");
 
-        addProduction("DeclarationSpecifiers", "TypeSpecifier"); //TODO uprosczone
+        addProduction("StorageClassSpecifier", "TYPEDEF");
+        addProduction("StorageClassSpecifier", "EXTERN");
+        addProduction("StorageClassSpecifier", "STATIC");
+        addProduction("StorageClassSpecifier", "AUTO");
+        addProduction("StorageClassSpecifier", "REGISTER");
+
+        addProduction("DeclarationSpecifiers", "TypeSpecifier");
         addProduction("DeclarationSpecifiers", "TypeSpecifier", "DeclarationSpecifiers");
         addProduction("DeclarationSpecifiers", "TypeQualifier");
         addProduction("DeclarationSpecifiers", "TypeQualifier", "DeclarationSpecifiers");
+        addProduction("DeclarationSpecifiers", "StorageClassSpecifier");
+        addProduction("DeclarationSpecifiers", "StorageClassSpecifier", "DeclarationSpecifiers");
 
         addProduction("DeclarationList", "Declaration");
         addProduction("DeclarationList", "Declaration", "DeclarationList");
 
-        addProduction("ParameterTypeList", "VOID");
+        addProduction("ParameterDeclaration", "DeclarationSpecifiers", "Declarator");
+        addProduction("ParameterDeclaration", "DeclarationSpecifiers", "AbstractDeclarator");
+        addProduction("ParameterDeclaration", "DeclarationSpecifiers");
 
-        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS"); //TODO VOID zamienić na Declarator i dopisać inne opcje
-        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
+        addProduction("ParameterList", "ParameterDeclaration");
+        addProduction("ParameterList", "ParameterDeclaration", "COMMA", "ParameterList");
+
+        addProduction("ParameterTypeList", "ParameterList");
+        addProduction("ParameterTypeList", "ParameterList", "COMMA", "ELLIPSIS");
+
+        addProduction("IdentifierList", "IDENTIFIER");
+        addProduction("IdentifierList", "IDENTIFIER", "COMMA", "IdentifierList");
+
         addProduction("DirectDeclarator", "IDENTIFIER");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "Declarator", "RIGHT_PARENTHESIS");
+        addProduction("DirectDeclarator", "LEFT_BRACKET", "ConditionalExpression", "RIGHT_BRACKET", "DirectDeclarator");
+        addProduction("DirectDeclarator", "LEFT_BRACKET", "RIGHT_BRACKET", "DirectDeclarator");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS", "DirectDeclarator");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "IdentifierList", "RIGHT_PARENTHESIS", "DirectDeclarator");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS", "DirectDeclarator");
 
         addProduction("Declarator", "DirectDeclarator");
+        addProduction("Declarator", "Pointer", "DirectDeclarator");
 
         addProduction("LabeledStatement", "IDENTIFIER", "TERNARY_CONDITIONAL_RIGHT", "Statement");
         addProduction("LabeledStatement", "CASE", "ConditionalExpression", "TERNARY_CONDITIONAL_RIGHT", "Statement"); //Uproszczone z ConstantExpression na ConditionalExpression
@@ -148,7 +236,9 @@ public class Grammar {
         addProduction("CompoundStatement", "LEFT_BRACE", "DeclarationList", "StatementList", "RIGHT_BRACE");
 
         addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "CompoundStatement");
+        addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "DeclarationList", "CompoundStatement");
         addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
+        addProduction("FunctionDefinition", "Declarator", "DeclarationList" , "CompoundStatement");
 
         addProduction("ShiftExpression", "AdditiveExpression");
         addProduction("ShiftExpression", "AdditiveExpression", "BITWISE_LEFT", "ShiftExpression");
@@ -202,6 +292,7 @@ public class Grammar {
 
         addProduction("Initializer", "AssignmentExpression");
         addProduction("Initializer", "LEFT_BRACE", "InitializerList", "RIGHT_BRACE");
+        addProduction("Initializer", "LEFT_BRACE", "InitializerList", "COMMA", "RIGHT_BRACE");
 
         addProduction("InitDeclarator", "Declarator");
         addProduction("InitDeclarator", "Declarator", "DIRECT_ASSIGNMENT", "Initializer");
