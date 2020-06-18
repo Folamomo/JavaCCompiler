@@ -6,12 +6,10 @@ import pl.edu.agh.p810.compiler.model.Token;
 import pl.edu.agh.p810.compiler.model.TokenType;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class RecursiveDescentParser implements Parser{
     private Grammar grammar;
-
     public RecursiveDescentParser(Grammar grammar) {
         this.grammar = grammar;
     }
@@ -31,6 +29,7 @@ public class RecursiveDescentParser implements Parser{
 
     private List<ParsingContext> parseNonterminal(Nonterminal symbol, List<Token> tokens, Nonterminal nonterminal) {
         List<ParsingContext> result = new ArrayList<>();
+//        System.out.println(symbol.name);
         for (var production : symbol.getProductions()){
             result.addAll(parseProduction(symbol, production, tokens));
         }

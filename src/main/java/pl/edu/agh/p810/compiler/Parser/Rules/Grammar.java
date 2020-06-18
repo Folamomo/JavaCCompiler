@@ -153,7 +153,7 @@ public class Grammar {
         addProduction("TypeSpecifier", "UNSIGNED");
         addProduction("TypeSpecifier", "StructOrUnionSpecifier");
         addProduction("TypeSpecifier", "EnumSpecifier");
-        addProduction("TypeSpecifier", "TypeName");
+//        addProduction("TypeSpecifier", "TypeName");
 
         addProduction("TypeQualifier", "CONST");
         addProduction("TypeQualifier", "VOLATILE");
