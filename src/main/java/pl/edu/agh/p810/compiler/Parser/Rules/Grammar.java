@@ -189,14 +189,17 @@ public class Grammar {
 
         addProduction("DirectDeclarator", "IDENTIFIER");
         addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "Declarator", "RIGHT_PARENTHESIS");
-        addProduction("DirectDeclarator", "LEFT_BRACKET", "ConditionalExpression", "RIGHT_BRACKET", "DirectDeclarator");
-        addProduction("DirectDeclarator", "LEFT_BRACKET", "RIGHT_BRACKET", "DirectDeclarator");
-        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS", "DirectDeclarator");
-        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "IdentifierList", "RIGHT_PARENTHESIS", "DirectDeclarator");
-        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS", "DirectDeclarator");
+        addProduction("DirectDeclarator", "LEFT_BRACKET", "ConditionalExpression", "RIGHT_BRACKET");
+        addProduction("DirectDeclarator", "LEFT_BRACKET", "RIGHT_BRACKET");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "IdentifierList", "RIGHT_PARENTHESIS");
+        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
 
-        addProduction("Declarator", "DirectDeclarator");
-        addProduction("Declarator", "Pointer", "DirectDeclarator");
+        addProduction("DirectDeclaratorList", "DirectDeclarator");
+        addProduction("DirectDeclaratorList", "DirectDeclarator", "DirectDeclaratorList");
+
+        addProduction("Declarator", "DirectDeclaratorList");
+        addProduction("Declarator", "Pointer", "DirectDeclaratorList");
 
         addProduction("LabeledStatement", "IDENTIFIER", "TERNARY_CONDITIONAL_RIGHT", "Statement");
         addProduction("LabeledStatement", "CASE", "ConditionalExpression", "TERNARY_CONDITIONAL_RIGHT", "Statement"); //Uproszczone z ConstantExpression na ConditionalExpression
@@ -235,10 +238,10 @@ public class Grammar {
         addProduction("CompoundStatement", "LEFT_BRACE", "StatementList",  "RIGHT_BRACE");
         addProduction("CompoundStatement", "LEFT_BRACE", "DeclarationList", "StatementList", "RIGHT_BRACE");
 
-        addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "CompoundStatement");
         addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "DeclarationList", "CompoundStatement");
-        addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
+        addProduction("FunctionDefinition", "DeclarationSpecifiers", "Declarator", "CompoundStatement");
         addProduction("FunctionDefinition", "Declarator", "DeclarationList" , "CompoundStatement");
+        addProduction("FunctionDefinition", "Declarator", "CompoundStatement");
 
         addProduction("ShiftExpression", "AdditiveExpression");
         addProduction("ShiftExpression", "AdditiveExpression", "BITWISE_LEFT", "ShiftExpression");
@@ -302,7 +305,6 @@ public class Grammar {
 
         addProduction("Declaration", "DeclarationSpecifiers", "SEMICOLON");
         addProduction("Declaration", "DeclarationSpecifiers", "InitDeclaratorList", "SEMICOLON");
-
         addProduction("ExternalDeclaration", "FunctionDefinition");
         addProduction("ExternalDeclaration", "Declaration");
 
