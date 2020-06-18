@@ -305,7 +305,7 @@ Declarator:
 
 LabeledStatement:	
 	IDENTIFIER, TERNARY_CONDITIONAL_RIGHT, Statement
-	CASE, ConditionalExpression, TERNARY_CONDITIONAL_RIGHT, Statement //Uproszczone z ConstantExpression na ConditionalExpression
+	CASE, ConditionalExpression, TERNARY_CONDITIONAL_RIGHT, Statement
 	DEFAULT, TERNARY_CONDITIONAL_RIGHT, Statement
 
 ExpressionStatement:	
@@ -444,31 +444,63 @@ TranslationUnit:
 ```
 ## Sposób działania
 #### Skaner
-W procesie analizy leksykalnej, kod źródłowy przechodzi przed dwa etapy: Tokenizer i Lekser.
+W procesie analizy leksykalnej kod źródłowy przechodzi przed dwa etapy: Tokenizer i Lekser.
 
-Tokenizer dokonuje transormacji kodu źródłowego do postaci tablicy stringów, gdzie każdy string odpowiada jednemu tokenowi (jakiemu konkretnie - tym zajmie się lekser).
+Tokenizer dokonuje transformacji kodu źródłowego do postaci tablicy stringów, gdzie każdy string odpowiada jednemu tokenowi (jakiemu konkretnie — tym zajmie się lekser).
 
 W procesie tokenizacji dodatkowo zignorowane zostają komentarze i białe znaki, które w procesie kompilacji nie mają znaczenia.
 
-Lekser dokonuje zamiany stringów otrzymanych z tokenizera na konkretne tokeny - jeżeli znajdzie odpowienik w słowniku zdefiniowanych słów kluczowych i separatorów to przypisuje mu odpowiedni typ, a jeżeli nie odnajdzie takiego tokenu w słowniku, to dokonuje odpowiednich sprawdzeń i przypisuje tokenowi jeden z typów - stała znakowa, liczbowa, całkowita lub identyfikator.
+Lekser dokonuje zamiany stringów otrzymanych z tokenizera na konkretne tokeny — jeżeli znajdzie odpowiednik w słowniku zdefiniowanych słów kluczowych i separatorów to przypisuje mu odpowiedni typ, a jeżeli nie odnajdzie takiego tokenu w słowniku, to dokonuje odpowiednich sprawdzeń i przypisuje tokenowi jeden z typów - stała znakowa, liczbowa, całkowita lub identyfikator.
 
 Tak przygotowaną listę tokenów można następnie przekazać dalej do analizy składniowej.
 #### Parser
+Parser pozwala na zamianę listy tokenów na Abstract Syntax Tree. W projekcie zastosowaliśmy Recursive Descent Parser. Gramatyka bezkontekstowa składa się z 2 rodzajów symboli:
+ - Terminalnych, odpowiadających 1 tokenowi;
+ - Nieterminalnych, składających się z 1 lub więcej produkcji.
+ 
+Ponieważ produkcje to listy symboli, gramatykę można traktować jako acykliczny graf skierowany. 
+
+Parser w trakcie działania, zaczynając od korzenia (Translation Unit), przeszukuje gramatykę wgłąb.
+Parser natrafiając na symbol nieterminalny, sprawdzi kolejno wszystkie jego produkcje.
+
+Wynikiem parsowania każdej produkcji będzie lista ParsingContext.
+ParsingContext zawiera AST reprezentujące wczytane symbole oraz ilość tokenów wczytanych. Ponieważ Java nie zawiera sensownej implementacji iteratora, do określenia pozycji w liście tokenów używamy metody subList, co zapobiega niepotrzebnemu kopiowaniu.
+
+ Długość listy zwróconej przez parser oznacza:   
+0  -> dana produkcja nie pasuje do tokenów.  
+1  -> można jednoznacznie stwierdzić co wczytane tokeny oznaczają.  
+2+ -> istnieją niejednoznaczności, które mogą zostać rozwiązanie po wczytaniu większej liczby symboli.
+
+Sprawdzanie produkcji polega na wywołaniu parsera na kolejnych jej symbolach od lewej strony. Ponieważ mogą pojawiać się niejednoznaczności, symbole są sprawdzane dla każdego ParsingContext. Po sprawdzeniu wszystkich produkcji wszystkie ParsingContext są zbierane w listę i zwracane.
+
+W momencie natrafienia na symbol terminalny sprawdzamy czy jest zgodny z następnym tokenem, i jeśli tak, budujemy nowy ParsingContext, i zwracamy go opakowanego w listę. Zwrócenie pustej listy oznacza niedopasowanie symbolu.
 #### Generator
 Generator kodu wyjściowego tworzymy implementując wzorzec projektowy Visitor. Węzły drzewa składniowego posiadają metodę accept która na poszczególnych poddrzewach uruchamia metodę Visitora visit.
 
-Działanie metody visit jest zależne od tego w jakim węźle Vistor się obecnie znajduje. Dla większości typów węzłów są generowane odpowiednie fragmenty kodu wyjściowego, oraz w wywoływane są metody visit na na poddrzewach (dzieciach) obecnie analizowanego węzła. Kolejność odwiedzanych dzieci jest zależna od oczekiwanego efektu końcowego.
+Działanie metody visit jest zależne od tego, w jakim węźle Vistor się obecnie znajduje. Dla większości typów węzłów są generowane odpowiednie fragmenty kodu wyjściowego, oraz w wywoływane są metody visit na na poddrzewach (dzieciach) obecnie analizowanego węzła. Kolejność odwiedzanych dzieci jest zależna od oczekiwanego efektu końcowego.
 
 Drzewo składniowe jest przez visitora przechodzone w głąb (DFS), do momentu aż algorytm dotrze do węzła oznaczonego jako EOF. Wtedy generator przerywa pracę.
 
 Zastosowanie tego wzorca umożliwia oddzielenie logiki generatora od drzewa składniowego i w efekcie stworzenie wielu visitorów w zależności od potrzeb i oczekiwanych wyników kompilacji.
 
 ## Praca nad projektem
-####Podział pracy
+#### Podział pracy
 
-## Dalszy rozwój aplikacji
+#### Największe wyzwania
+Najtrudniejszym elementem pisania kompilatora było przygotowanie parsera. Bardzo ciężko było wymyślić jak parser ma działać, a potem doprowadzić do tego, żeby poprawnie budował drzewo składniowe. Oprócz tego, bardzo trudno było nam odnaleźć materiały, które tłumaczyłyby praktyczny aspekt działania parsera i jego poprawną implementację.
 
-##Wnioski
+#### Dalszy rozwój aplikacji
+
+
+## Wnioski
+Działanie kompilatora w wersji uproszczonej (z ograniczonymi regułami gramatyki) jest poprawne i kończy się sukcesem w rozsądnym czasie. Niestety, w momencie gdy parser uwzględnia pełną gramatykę (wszystkie reguły zawarte w tej dokumentacji) to ze względu na sposób działania, nawet prosty kilkunastolinijkowy kod potrafi się kompilować kilka minut.
+
+Jedną z przyczyn może być to, że Java, jako język dość wysokiego poziomu, nieszczególnie nadaje się do takich zadań jak kompilowanie innych języków.
+
+Oprócz tego z pewnością metoda przez nas użyta nie jest w pełni optymalna, mogliśmy też po drodze popełnić różne błędy związane z optymalizacją.
+
+Podczas pracy nad projektem uznaliśmy, że stworzenie własnego parsera jest zbyt skomplikowane i najlepiej byłoby użyć do tego gotowych narzędzi. Natomiast skaner i generator działają w sposób bardzo prosty i mechaniczny i w ich własnoręcznym napisaniu nie ma nic odkrywczego.
+
 
 ## Źródła
 - <a id="1">[1]</a>  http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf
