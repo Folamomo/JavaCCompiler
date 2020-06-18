@@ -9,8 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class ParsingResult {
+public class ParsingContext {
     AST ast;
     List<Token> remainingTokens;
-
 }

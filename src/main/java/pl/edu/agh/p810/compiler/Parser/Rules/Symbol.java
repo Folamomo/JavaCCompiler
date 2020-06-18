@@ -10,5 +10,4 @@ public abstract class Symbol {
     protected Symbol(String name) {
         this.name = name;
     }
-    public abstract List<ParsingResult> parse(List<Token> tokens);
 }

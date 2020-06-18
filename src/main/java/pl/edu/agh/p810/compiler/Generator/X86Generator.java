@@ -2,7 +2,7 @@ package pl.edu.agh.p810.compiler.Generator;
 
 import pl.edu.agh.p810.compiler.Parser.AST;
 
-public class X86Generator implements Visitor{
+public class X86Generator implements ASTVisitor {
 
     @Override
     public void visit(AST ast) {
