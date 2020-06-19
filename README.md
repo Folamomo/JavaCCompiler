@@ -8,7 +8,7 @@ _Jakub Ficoń, Igor Noga, Bartosz Ociepka_
 ## Specyfikacja jezyka
 Specyfikacja została zaczerpnięta ze standardu ISO/IEC 9899:201x[[1]](#1), nasza aplikacja obsługuje wybrane elementy z tamtej specyfikacji.
 #### Elementy leksykalne
-Tokenizer w naszej aplikacji rozpoznaje nastepujace elementy jezyka:
+Tokenizer w naszej aplikacji rozpoznaje następujące elementy języka:
 ##### 1. Identyfikatory
 ##### 2. Stałe (constants)
 Wyróżniamy: stałe liczbowe, całkowite i znakowe.
