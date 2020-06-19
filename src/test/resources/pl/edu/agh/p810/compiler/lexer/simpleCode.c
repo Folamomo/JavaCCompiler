@@ -1,3 +1,7 @@
+int a;
+double b;
+long c;
+
 int main ( )
  {
    int a;

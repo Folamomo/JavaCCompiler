@@ -70,8 +70,9 @@ public class GlobalVariableGenerator extends AbstractGenerator {
         }
 
         if (declarator.getChildren().size()==1){
-            name = declarator.getChildren().get(0).getValue();
+            name = declarator.getChildren().get(0).getChildren().get(0).getValue();
         }
+
         Identifier newIdentifier = new VariableIdentifier(
                 String.join(" ", typeSpecifiers),
                 pointerCount, typeQualifiers.contains("CONST"),
@@ -80,6 +81,6 @@ public class GlobalVariableGenerator extends AbstractGenerator {
                 name);
 
         parent.getIdentifierTable().add(newIdentifier);
-        out.write(name + ":\t.zero\t" + newIdentifier.sizeOf());
+        out.write(name + ":\t.zero\t" + newIdentifier.sizeOf() + "\n");
     }
 }

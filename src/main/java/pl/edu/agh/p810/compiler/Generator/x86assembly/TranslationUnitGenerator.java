@@ -22,7 +22,7 @@ public class TranslationUnitGenerator extends AbstractGenerator {
         switch (ast.getSymbol().name){
             case "Declaration" -> ast.accept(new GlobalVariableGenerator(this));
             case "FunctionDefinition" -> ast.accept(new FunctionGenerator(this));
-            case "EOF" -> out.write(";EOF");
+            case "EOF" -> {out.write(";EOF"); out.flush();}
             default -> ast.getChildren().forEach(child -> child.accept(this));
         }
     }

@@ -37,6 +37,8 @@ class TokenizerTest {
         RecursiveDescentParser parser = new RecursiveDescentParser(new Grammar());
         AST ast = parser.parse(result);
         int b = 0;
+        TranslationUnitGenerator generator = new TranslationUnitGenerator(System.out, System.err);
+        generator.visit(ast);
     }
 
     @Test public void visitor(){

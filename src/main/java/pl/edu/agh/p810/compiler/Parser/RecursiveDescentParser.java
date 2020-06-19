@@ -16,7 +16,9 @@ public class RecursiveDescentParser implements Parser{
 
     public AST parse(List<Token> tokens){
         tokens.add(new Token(TokenType.EOF, null, 0));
-        return parseSymbol(grammar.getStart(), tokens).get(0).getAst();
+        List<ParsingContext> result = parseSymbol(grammar.getStart(), tokens);
+
+        return result.get(0).getAst();
     }
 
     public List<ParsingContext> parseSymbol(Symbol symbol, List<Token> tokens){
