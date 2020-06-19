@@ -475,7 +475,7 @@ Sprawdzanie produkcji polega na wywołaniu parsera na kolejnych jej symbolach od
 
 W momencie natrafienia na symbol terminalny sprawdzamy czy jest zgodny z następnym tokenem, i jeśli tak, budujemy nowy ParsingContext, i zwracamy go opakowanego w listę. Zwrócenie pustej listy oznacza niedopasowanie symbolu.
 #### Generator
-Generator kodu wyjściowego tworzymy implementując wzorzec projektowy Visitor. Węzły drzewa składniowego posiadają metodę accept która na poszczególnych poddrzewach uruchamia metodę Visitora visit.
+Generator kodu wyjściowego tworzymy implementując wzorzec projektowy Visitor. Węzły drzewa składniowego posiadają metodę accept, która na poszczególnych poddrzewach uruchamia metodę Visitora visit.
 
 Działanie metody visit jest zależne od tego, w jakim węźle Vistor się obecnie znajduje. Dla większości typów węzłów są generowane odpowiednie fragmenty kodu wyjściowego, oraz w wywoływane są metody visit na na poddrzewach (dzieciach) obecnie analizowanego węzła. Kolejność odwiedzanych dzieci jest zależna od oczekiwanego efektu końcowego.
 
@@ -484,12 +484,13 @@ Drzewo składniowe jest przez visitora przechodzone w głąb (DFS), do momentu a
 Zastosowanie tego wzorca umożliwia oddzielenie logiki generatora od drzewa składniowego i w efekcie stworzenie wielu visitorów w zależności od potrzeb i oczekiwanych wyników kompilacji.
 
 ## Praca nad projektem
-#### Podział pracy
 
 #### Największe wyzwania
 Najtrudniejszym elementem pisania kompilatora było przygotowanie parsera. Bardzo ciężko było wymyślić jak parser ma działać, a potem doprowadzić do tego, żeby poprawnie budował drzewo składniowe. Oprócz tego, bardzo trudno było nam odnaleźć materiały, które tłumaczyłyby praktyczny aspekt działania parsera i jego poprawną implementację.
 
 #### Dalszy rozwój aplikacji
+Generator nie jest jeszcze w pełni funkcjonalny — ogólna logika działania jest, ale brakuje implementacji niektórych elementów języka.
+Dodatkowo parserowi przydałoby się sporo poprawek dotyczących jego optymalizacji.
 
 
 ## Wnioski
