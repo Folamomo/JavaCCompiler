@@ -237,7 +237,6 @@ TypeSpecifier:
 	VOID
 	CHAR
 	SHORT
-	INT
 	LONG
 	FLOAT
 	DOUBLE
@@ -477,7 +476,7 @@ W momencie natrafienia na symbol terminalny sprawdzamy czy jest zgodny z następ
 #### Generator
 Generator kodu wyjściowego tworzymy implementując wzorzec projektowy Visitor. Węzły drzewa składniowego posiadają metodę accept, która na poszczególnych poddrzewach uruchamia metodę Visitora visit.
 
-Działanie metody visit jest zależne od tego, w jakim węźle Vistor się obecnie znajduje. Dla większości typów węzłów są generowane odpowiednie fragmenty kodu wyjściowego, oraz w wywoływane są metody visit na na poddrzewach (dzieciach) obecnie analizowanego węzła. Kolejność odwiedzanych dzieci jest zależna od oczekiwanego efektu końcowego.
+Działanie metody visit jest zależne od tego, w jakim węźle Vistor się obecnie znajduje. Dla większości typów węzłów są generowane odpowiednie fragmenty kodu wyjściowego, oraz w wywoływane są metody visit na poddrzewach (dzieciach) obecnie analizowanego węzła. Kolejność odwiedzanych dzieci jest zależna od oczekiwanego efektu końcowego.
 
 Drzewo składniowe jest przez visitora przechodzone w głąb (DFS), do momentu aż algorytm dotrze do węzła oznaczonego jako EOF. Wtedy generator przerywa pracę.
 
@@ -494,7 +493,7 @@ Dodatkowo parserowi przydałoby się sporo poprawek dotyczących jego optymaliza
 
 
 ## Wnioski
-Działanie kompilatora w wersji uproszczonej (z ograniczonymi regułami gramatyki) jest poprawne i kończy się sukcesem w rozsądnym czasie. Niestety, w momencie gdy parser uwzględnia pełną gramatykę (wszystkie reguły zawarte w tej dokumentacji) to ze względu na sposób działania, nawet prosty kilkunastolinijkowy kod potrafi się kompilować kilka minut.
+Działanie kompilatora w wersji uproszczonej (z ograniczonymi regułami gramatyki) jest poprawne i kończy się sukcesem w rozsądnym czasie. Niestety, w momencie gdy parser uwzględnia pełną gramatykę (wszystkie reguły zawarte w tej dokumentacji), to wraz ze wzrostem długości kodu, czas kompilacji rośnie znacząco.
 
 Jedną z przyczyn może być to, że Java, jako język dość wysokiego poziomu, nieszczególnie nadaje się do takich zadań jak kompilowanie innych języków.
 
