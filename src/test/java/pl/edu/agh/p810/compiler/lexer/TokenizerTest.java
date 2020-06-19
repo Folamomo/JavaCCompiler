@@ -3,7 +3,7 @@ package pl.edu.agh.p810.compiler.lexer;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.p810.compiler.Parser.AST;
 import pl.edu.agh.p810.compiler.Parser.RecursiveDescentParser;
-import pl.edu.agh.p810.compiler.Generator.X86Generator;
+import pl.edu.agh.p810.compiler.Generator.x86assembly.TranslationUnitGenerator;
 import pl.edu.agh.p810.compiler.Parser.Rules.Grammar;
 import pl.edu.agh.p810.compiler.model.Token;
 
@@ -33,9 +33,10 @@ class TokenizerTest {
                 this.getClass().getResourceAsStream("simpleCode.c"))));
         Lexer lexer = new Lexer();
         List<Token> result = lexer.getTokensStream(tokenizer.getTokens()).collect(Collectors.toList());
+        int a = 0;
         RecursiveDescentParser parser = new RecursiveDescentParser(new Grammar());
         AST ast = parser.parse(result);
-        int a = 0;
+        int b = 0;
     }
 
     @Test public void visitor(){
@@ -45,7 +46,7 @@ class TokenizerTest {
         List<Token> result = lexer.getTokensStream(tokenizer.getTokens()).collect(Collectors.toList());
         RecursiveDescentParser parser = new RecursiveDescentParser(new Grammar());
         AST ast = parser.parse(result);
-        X86Generator x86Generator = new X86Generator();
-        x86Generator.visit(ast);
+        TranslationUnitGenerator translationUnitGenerator = new TranslationUnitGenerator(System.out, System.err);
+        translationUnitGenerator.visit(ast);
     }
 }

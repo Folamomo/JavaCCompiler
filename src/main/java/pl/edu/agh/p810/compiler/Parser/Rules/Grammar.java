@@ -145,7 +145,6 @@ public class Grammar {
         addProduction("TypeSpecifier", "VOID");
         addProduction("TypeSpecifier", "CHAR");
         addProduction("TypeSpecifier", "SHORT");
-        addProduction("TypeSpecifier", "INT");
         addProduction("TypeSpecifier", "LONG");
         addProduction("TypeSpecifier", "FLOAT");
         addProduction("TypeSpecifier", "DOUBLE");
@@ -189,17 +188,14 @@ public class Grammar {
 
         addProduction("DirectDeclarator", "IDENTIFIER");
         addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "Declarator", "RIGHT_PARENTHESIS");
-        addProduction("DirectDeclarator", "LEFT_BRACKET", "ConditionalExpression", "RIGHT_BRACKET");
-        addProduction("DirectDeclarator", "LEFT_BRACKET", "RIGHT_BRACKET");
-        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS");
-        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "IdentifierList", "RIGHT_PARENTHESIS");
-        addProduction("DirectDeclarator", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_BRACKET", "ConditionalExpression", "RIGHT_BRACKET");
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_BRACKET", "RIGHT_BRACKET");
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "ParameterTypeList", "RIGHT_PARENTHESIS");
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "IdentifierList", "RIGHT_PARENTHESIS");
+        addProduction("DirectDeclarator", "IDENTIFIER", "LEFT_PARENTHESIS", "RIGHT_PARENTHESIS");
 
-        addProduction("DirectDeclaratorList", "DirectDeclarator");
-        addProduction("DirectDeclaratorList", "DirectDeclarator", "DirectDeclaratorList");
-
-        addProduction("Declarator", "DirectDeclaratorList");
-        addProduction("Declarator", "Pointer", "DirectDeclaratorList");
+        addProduction("Declarator", "DirectDeclarator");
+        addProduction("Declarator", "Pointer", "Declarator");
 
         addProduction("LabeledStatement", "IDENTIFIER", "TERNARY_CONDITIONAL_RIGHT", "Statement");
         addProduction("LabeledStatement", "CASE", "ConditionalExpression", "TERNARY_CONDITIONAL_RIGHT", "Statement"); //Uproszczone z ConstantExpression na ConditionalExpression

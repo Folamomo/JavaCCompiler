@@ -5,6 +5,7 @@ import lombok.Data;
 import pl.edu.agh.p810.compiler.Generator.ASTVisitor;
 import pl.edu.agh.p810.compiler.Parser.Rules.Symbol;
 
+import java.io.IOException;
 import java.util.List;
 
 @Data
@@ -13,7 +14,7 @@ public class AST {
     Symbol symbol;
     String value;
     List<AST> children;
-    public void accept(ASTVisitor ASTVisitor){
+    public void accept(ASTVisitor ASTVisitor) {
         ASTVisitor.visit(this);
     }
 }
