@@ -449,7 +449,7 @@ Tokenizer dokonuje transformacji kodu źródłowego do postaci tablicy stringów
 
 W procesie tokenizacji dodatkowo zignorowane zostają komentarze i białe znaki, które w procesie kompilacji nie mają znaczenia.
 
-Lekser dokonuje zamiany stringów otrzymanych z tokenizera na konkretne tokeny — jeżeli znajdzie odpowiednik w słowniku zdefiniowanych słów kluczowych i separatorów to przypisuje mu odpowiedni typ, a jeżeli nie odnajdzie takiego tokenu w słowniku, to dokonuje odpowiednich sprawdzeń i przypisuje tokenowi jeden z typów - stała znakowa, liczbowa, całkowita lub identyfikator.
+Lekser dokonuje zamiany stringów otrzymanych z tokenizera na konkretne tokeny — jeżeli znajdzie odpowiednik w słowniku zdefiniowanych słów kluczowych i separatorów to przypisuje mu odpowiedni typ, a jeżeli nie odnajdzie takiego tokenu w słowniku, to dokonuje odpowiednich sprawdzeń i przypisuje tokenowi jeden z typów — stała znakowa, liczbowa, całkowita lub identyfikator.
 
 Tak przygotowaną listę tokenów można następnie przekazać dalej do analizy składniowej.
 #### Parser
@@ -476,7 +476,7 @@ W momencie natrafienia na symbol terminalny sprawdzamy czy jest zgodny z następ
 #### Generator
 Generator kodu wyjściowego tworzymy implementując wzorzec projektowy Visitor. Węzły drzewa składniowego posiadają metodę accept, która na poszczególnych poddrzewach uruchamia metodę Visitora visit.
 
-Działanie metody visit jest zależne od tego, w jakim węźle Vistor się obecnie znajduje. Dla większości typów węzłów są generowane odpowiednie fragmenty kodu wyjściowego, oraz w wywoływane są metody visit na poddrzewach (dzieciach) obecnie analizowanego węzła. Kolejność odwiedzanych dzieci jest zależna od oczekiwanego efektu końcowego.
+Działanie metody visit jest zależne od tego, w jakim węźle Vistor się obecnie znajduje. Dla większości typów węzłów są generowane odpowiednie fragmenty kodu wyjściowego oraz w wywoływane są metody visit na poddrzewach (dzieciach) obecnie analizowanego węzła. Kolejność odwiedzanych dzieci jest zależna od oczekiwanego efektu.
 
 Drzewo składniowe jest przez visitora przechodzone w głąb (DFS), do momentu aż algorytm dotrze do węzła oznaczonego jako EOF. Wtedy generator przerywa pracę.
 
@@ -485,15 +485,16 @@ Zastosowanie tego wzorca umożliwia oddzielenie logiki generatora od drzewa skł
 ## Praca nad projektem
 
 #### Największe wyzwania
-Najtrudniejszym elementem pisania kompilatora było przygotowanie parsera. Bardzo ciężko było wymyślić jak parser ma działać, a potem doprowadzić do tego, żeby poprawnie budował drzewo składniowe. Oprócz tego, bardzo trudno było nam odnaleźć materiały, które tłumaczyłyby praktyczny aspekt działania parsera i jego poprawną implementację.
+Najtrudniejszym elementem pisania kompilatora było przygotowanie parsera. Bardzo ciężko było wymyślić jak parser ma działać, a potem doprowadzić do tego, żeby poprawnie budował drzewo składniowe. Oprócz tego bardzo trudno było nam odnaleźć materiały, które tłumaczyłyby praktyczny aspekt działania parsera i jego poprawną implementację.
 
 #### Dalszy rozwój aplikacji
 Generator nie jest jeszcze w pełni funkcjonalny — ogólna logika działania jest, ale brakuje implementacji niektórych elementów języka.
 Dodatkowo parserowi przydałoby się sporo poprawek dotyczących jego optymalizacji.
+Oprócz tego można dodać do kompilatora optymalizator, żeby generowany kod maszynowy działał sprawniej podczas wykonywania.
 
 
 ## Wnioski
-Działanie kompilatora w wersji uproszczonej (z ograniczonymi regułami gramatyki) jest poprawne i kończy się sukcesem w rozsądnym czasie. Niestety, w momencie gdy parser uwzględnia pełną gramatykę (wszystkie reguły zawarte w tej dokumentacji), to wraz ze wzrostem długości kodu, czas kompilacji rośnie znacząco.
+Działanie kompilatora w wersji uproszczonej (z ograniczonymi regułami gramatyki) jest poprawne i kończy się sukcesem w rozsądnym czasie. Niestety, w momencie, gdy parser uwzględnia pełną gramatykę (wszystkie reguły zawarte w tej dokumentacji), to wraz ze wzrostem długości kodu, czas kompilacji rośnie znacząco.
 
 Jedną z przyczyn może być to, że Java, jako język dość wysokiego poziomu, nieszczególnie nadaje się do takich zadań jak kompilowanie innych języków.
 
