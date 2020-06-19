@@ -488,6 +488,9 @@ Zastosowanie tego wzorca umożliwia oddzielenie logiki generatora od drzewa skł
 Najtrudniejszym elementem pisania kompilatora było przygotowanie parsera. Bardzo ciężko było wymyślić jak parser ma działać, a potem doprowadzić do tego, żeby poprawnie budował drzewo składniowe. Oprócz tego bardzo trudno było nam odnaleźć materiały, które tłumaczyłyby praktyczny aspekt działania parsera i jego poprawną implementację.
 
 #### Dalszy rozwój aplikacji
+W pierwszej kolejności trzeba poprawić obslugę wyjątków, żeby błędy informowały na jakim etapie gramatyki występuję błąd.
+Następnie trzeba jeszcze raz przeglądnąć gramatykę i dokłądnie ją przetestować.
+Parser wymaga optymalizacji, albo całkowitej refaktoryzacji.
 Generator nie jest jeszcze w pełni funkcjonalny — ogólna logika działania jest, ale brakuje implementacji niektórych elementów języka.
 Dodatkowo parserowi przydałoby się sporo poprawek dotyczących jego optymalizacji.
 Oprócz tego można dodać do kompilatora optymalizator, żeby generowany kod maszynowy działał sprawniej podczas wykonywania.
