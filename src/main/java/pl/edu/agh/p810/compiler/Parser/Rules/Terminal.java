@@ -13,17 +13,4 @@ public class Terminal extends Symbol {
         super(type.name());
         this.type = type;
     }
-
-    @Override
-    public List<ParsingResult> parse(List<Token> tokens) {
-        if (!tokens.isEmpty() && tokens.get(0).getTokenType()==type){
-            return List.of(new ParsingResult(makeAST(tokens.get(0)), tokens.subList(1, tokens.size())));
-        } else {
-            return List.of();
-        }
-    }
-
-    private AST makeAST(Token token){
-        return new AST(this, token.getValue(), List.of());
-    }
 }
