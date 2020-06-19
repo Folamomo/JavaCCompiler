@@ -104,7 +104,8 @@ public class Tokenizer {
                             if(raw[i+1] == '*') {
                                 inComment = true;
                             }
-                        } else if(isOneCharSymbol(raw[i])){
+                        }
+                        if(isOneCharSymbol(raw[i])){
                             tokens.add(new String(raw, i, 1));
                         }
                         else inSymbol = true;

@@ -1,5 +1,19 @@
-int main( )
-{
-    int c = 12 + 3;
-    int a = 123;
-}
+int a;
+double b = 7;
+long c;
+
+int main ( )
+ {
+   int a;
+   int b = 12;
+   a = 10;
+   if( a )
+   {
+    return a;
+   }
+   return b;
+ }
+
+
+
+
