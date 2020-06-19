@@ -10,6 +10,10 @@ public class FunctionGenerator extends AbstractGenerator {
 
     @Override
     public void visit(AST ast) {
+        switch (ast.getSymbol().name){
+            case "FunctionDefinition" -> visitFunctionDefinition(ast);
+            case "Default" -> {}
+        }
 
     }
 

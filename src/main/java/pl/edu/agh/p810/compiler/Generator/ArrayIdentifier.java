@@ -5,4 +5,9 @@ public class ArrayIdentifier extends VariableIdentifier{
     public ArrayIdentifier(String type, int pointerCount, boolean isConst, boolean isVolatile, String location, String name, long size) {
         super(type, pointerCount, isConst, isVolatile, location, name);
     }
+
+    @Override
+    public long sizeOf() {
+        return size * typeToSize(type);
+    }
 }

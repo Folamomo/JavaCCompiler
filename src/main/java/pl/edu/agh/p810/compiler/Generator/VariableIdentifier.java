@@ -11,13 +11,8 @@ public class VariableIdentifier extends Identifier {
     }
 
     @Override
-    public int sizeOf() {
+    public long sizeOf() {
         if (pointerCount > 0) return 8;
-        return switch (type){
-            case "LONG", "DOUBLE" -> 8;
-            case "INT", "FLOAT" -> 4;
-            case "SHORT" -> 2;
-            default -> 1;
-        };
+        return typeToSize(type);
     }
 }

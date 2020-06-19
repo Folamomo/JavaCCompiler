@@ -1,5 +1,5 @@
 int a;
-double b;
+double b = 7;
 long c;
 
 int main ( )

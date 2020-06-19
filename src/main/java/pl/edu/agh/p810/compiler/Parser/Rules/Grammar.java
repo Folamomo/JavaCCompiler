@@ -301,6 +301,7 @@ public class Grammar {
 
         addProduction("Declaration", "DeclarationSpecifiers", "SEMICOLON");
         addProduction("Declaration", "DeclarationSpecifiers", "InitDeclaratorList", "SEMICOLON");
+
         addProduction("ExternalDeclaration", "FunctionDefinition");
         addProduction("ExternalDeclaration", "Declaration");
 

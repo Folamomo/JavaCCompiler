@@ -10,5 +10,14 @@ public abstract class Identifier {
     String location;
     String name;
 
-    public abstract int sizeOf();
+    public abstract long sizeOf();
+
+    public long typeToSize(String type){
+        return switch (type){
+            case "LONG", "DOUBLE" -> 8;
+            case "INT", "FLOAT" -> 4;
+            case "SHORT" -> 2;
+            default -> 1;
+        };
+    }
 }
